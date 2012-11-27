@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = PokeJs::VERSION
   gem.authors       = ["s12chung"]
   gem.email         = ["steve@placemarklist.com"]
-  gem.description   = %q{ Moves all javascript into application.js using the Garber-Irish Implementation }
-  gem.summary       = %q{ Moves all javascript into application.js using the Garber-Irish Implementation }
+  gem.description   = %q{ Moves all javascript into assets js files using the Garber-Irish Implementation }
+  gem.summary       = %q{ Moves all javascript into assets js files using the Garber-Irish Implementation }
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
