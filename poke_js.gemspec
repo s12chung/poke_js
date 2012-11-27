@@ -7,9 +7,9 @@ Gem::Specification.new do |gem|
   gem.name          = "poke_js"
   gem.version       = PokeJs::VERSION
   gem.authors       = ["s12chung"]
-  gem.email         = ["steve.chung7@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.email         = ["steve@placemarklist.com"]
+  gem.description   = %q{ Moves all javascript into application.js using the Garber-Irish Implementation }
+  gem.summary       = %q{ Moves all javascript into application.js using the Garber-Irish Implementation }
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
