@@ -1,4 +1,3 @@
-require "poke_js/version"
 require "poke_js/view_helpers"
 
 module PokeJs
