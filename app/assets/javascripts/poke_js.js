@@ -15,7 +15,7 @@ POKE = {
     },
     define: function(namespace, hash, o) {
         var o_namespace = POKE.get_or_create(namespace, o);
-        $.extend(o_namespace, hash);
+        return $.extend(o_namespace, hash);
     },
 
 
