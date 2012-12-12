@@ -3,24 +3,24 @@ POKE = {
     blank: function(o) {
         return typeof o === "undefined" || o === null;
     },
-    present: function(o) {
-        return !POKE.blank(o);
+    get_or_create: function(namespace_string) {
+        var current_namepace = window;
+        $.each(namespace_string.split('.'), function(index, level) {
+            if (POKE.blank(current_namepace[level]))
+                current_namepace[level] = {};
+            current_namepace = current_namepace[level];
+        });
+
+        return current_namepace;
     },
-    get_or_create: function(namespace, o) {
-        if (POKE.blank(o))
-            o = APP;
-        if (POKE.blank(o[namespace]))
-            o[namespace] = {};
-        return o[namespace];
-    },
-    define: function(namespace, hash, o) {
-        var o_namespace = POKE.get_or_create(namespace, o);
-        return $.extend(o_namespace, hash);
+    define: function(namespace_string, definition) {
+        var found_namespace = POKE.get_or_create(namespace_string);
+        return $.extend(found_namespace, definition);
     },
 
 
     exec_all: function(controller, format, action) {
-        POKE.exec("app", format);
+        POKE.exec("all", format);
         POKE.exec(controller, format);
         POKE.exec(controller, format, action);
     },
@@ -44,5 +44,15 @@ POKE = {
 };
 
 if (POKE.blank(window["APP"]))
-    APP = {};
+    APP = {
+        namespace_string: function(namespace_string) {
+            return "APP." + namespace_string;
+        },
+        get_or_create: function(namespace_string) {
+            POKE.define(APP.namespace_string(namespace_string));
+        },
+        define: function(namespace_string, definition) {
+            POKE.define(APP.namespace_string(namespace_string), definition);
+        }
+    };
 $(POKE.init);
