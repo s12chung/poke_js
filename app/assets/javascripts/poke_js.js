@@ -49,10 +49,10 @@ if (POKE.blank(window["APP"]))
             return "APP." + namespace_string;
         },
         get_or_create: function(namespace_string) {
-            POKE.define(APP.namespace_string(namespace_string));
+            return POKE.define(APP.namespace_string(namespace_string));
         },
         define: function(namespace_string, definition) {
-            POKE.define(APP.namespace_string(namespace_string), definition);
+            return POKE.define(APP.namespace_string(namespace_string), definition);
         }
     };
 $(POKE.init);
