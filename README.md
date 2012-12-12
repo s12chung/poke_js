@@ -30,7 +30,7 @@ After, requests to `demos#demo_action` with format `html` will call the followin
 * `APP.demos.html.init`
 * `APP.demos.html.demo_action` (with parameters if given)
 
-js format is also supported, i.e.:
+`js` format is also supported, i.e.:
 * `APP.all.js.init`
 * `APP.demos.js.init`
 * `APP.demos.js.demo_action` (with parameters if given)
@@ -64,7 +64,7 @@ I like to have a JS file for every controller in `app/assets/javascripts/control
 `app/assets/javascripts/controllers/demos.js`:
 ```javascript
 (function() {
-	// "APP.define()" extends or creates the namespace APP.demos and returns it. This allows me to access "demos" with typing "APP.demos".
+	// "APP.define()" extends or creates the namespace "APP.demos" and returns it. This allows me to access "demos" with typing "APP.demos".
 	var demos = APP.define('demos', {
 		html: {
 			edit: function(params) {
