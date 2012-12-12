@@ -1,9 +1,41 @@
 # PokeJs
+Auto-magical scaffolding for the [Garber-Irish Implementation](http://viget.com/inspire/extending-paul-irishs-comprehensive-dom-ready-execution) way of organizing your javascript.
 
-Moves all javascript into assets js files using the [Garber-Irish Implementation](http://viget.com/inspire/extending-paul-irishs-comprehensive-dom-ready-execution).
+## Purpose
+Javascript is hard to organize and debugging ajax is a mess. This is one method to organizing your javascript neatly by mirroring the controllers and having all the JS outside of your HTML views.
+
+## How it works
+### Setup your namespace
+```javascript
+APP = {
+	all: {
+		html: {
+			init: function() {
+			}
+		}
+	},
+	demos: {
+		html: {
+			init: function() {
+			},
+			demo_action: function() {
+			}
+		}
+	}
+}
+```
+### What happens
+After, requests to demos#demo_action with format html will call the following functions (if they exist):
+* APP.all.html.init
+* APP.demos.html.init
+* APP.demos.html.demo_action (with parameters if given)
+
+js format is also supported, i.e.:
+* APP.all.js.init
+* APP.demos.js.init
+* APP.demos.js.demo_action (with parameters if given)
 
 ## Installation
-
 Add this line to your application's Gemfile:
 
     gem 'poke_js'
@@ -12,10 +44,49 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Make sure your app/views/layouts/application.html.erb (and all your other layouts) looks like this:
+```html
+<html>
+<head>… <%= poke %> …</head>
+    <body data-controller="<%= poke_js_template.first %>" data-action="<%= poke_js_template.last %>">…</body>
+</html>
+```
 
-    $ gem install poke_js
+## Basic Use
+What I do is separate my JS file for every controller in app/assets/javascripts/controllers. Like so:
 
-## Usage
+app/assets/javascripts/controllers/demos.js:
+```javascript
+(function() {
+	// "APP.define()" extends the namespace demos if it exists and returns it. This allows me to access "demos" with typing "APP.demos".
+	var demos = APP.define('demos', {
+		html: {
+			edit: function(params) {
+				alert(params.alert_message);
+			}
+		},
 
-To be written
+		js: {
+			new: function(params) {
+				console.log(params.log_message);
+			}
+		}
+	});
+})();
+```
+### HTML
+So if a html request is sent to demos#edit, APP.demos.html.edit is called. If I want to pass parameters, I create:
+
+app/views/demos/edit_params.js.jbuilder (or use your favourite JSON DSL):
+json.alert_message "ploop"
+
+
+### Javascript
+For a js request sent to demos#new, APP.demos.js.new is called, as if it was the javascript returned from the AJAX called. Parameters are passed with:
+app/views/demos/new.js.jbuilder (or use your favourite JSON DSL):
+json.log_message "loggggggggggggg"
+
+## Advanced Use
+To be written...
+
+
