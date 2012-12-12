@@ -44,8 +44,12 @@ And then execute:
 
     $ bundle
 
+Add this to your app/assets/application.js
+
+    //= require poke_js
+
 Make sure your app/views/layouts/application.html.erb (and all your other layouts) looks like this:
-```html
+```html.erb
 <html>
 <head>… <%= poke %> …</head>
     <body data-controller="<%= poke_js_template.first %>" data-action="<%= poke_js_template.last %>">…</body>
@@ -75,10 +79,10 @@ app/assets/javascripts/controllers/demos.js:
 })();
 ```
 ### HTML
-So if a `html` request is sent to `demos#edit`, `APP.demos.html.edit` is called.
+So if a `html` request is sent to `demos#edit`, `APP.demos.html.edit` is called with the HTML view rendering.
 
 ### Javascript
-For a `js` request sent to `demos#new`, `APP.demos.js.new` is called, as if it was the javascript returned from the AJAX request is called. 
+For a `js` request sent to `demos#new`, `APP.demos.js.new` is called and nothing else happens.
 
 ### Passing parameters
 __Optional__ Parameters are passed from a JSON DSL (such as [jbuilder](https://github.com/rails/jbuilder/)) and are passed as the `params` object to the function.
@@ -91,7 +95,7 @@ json.alert_message "ploop"
 so 
 ```javascript
 APP.demos.html.edit({
-	alert_message: "plop"
+	alert_message: "ploop"
 });
 ```
 is called automatically.
@@ -104,12 +108,11 @@ json.log_message "loggggggggggggg"
 so
 ```javascript
 APP.demos.js.new({
-	alert_message: "plop"
+	log_message: "loggggggggggggg"
 });
 ```
 is called automatically.
 
 ## Advanced Use
 To be written...
-
 
