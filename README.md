@@ -52,7 +52,7 @@ Make sure your `app/views/layouts/application.html.erb` (and all your other layo
 ```erb
 <html>
 <head>… <%= poke %> …</head>
-<body data-controller=`<%= poke_js_template.first %>` data-action=`<%= poke_js_template.last %>`>
+<body data-controller="<%= poke_js_template.first %>" data-action="<%= poke_js_template.last %>">
     …
 </body>
 </html>
@@ -99,25 +99,24 @@ __Optional__ Parameters are passed from a JSON DSL (such as [jbuilder](https://g
 #### HTML
 `app/views/demos/edit_params.js.jbuilder`:
 ```ruby
-json.alert_message `ploop`
+json.alert_message "ploop"
 ```
 so 
 ```javascript
-APP.demos.html.edit({ alert_message: `ploop` });
+APP.demos.html.edit({ alert_message: "ploop" });
 ```
 is called automatically.
 
 #### Javascript
 `app/views/demos/new.js.jbuilder`:
 ```ruby
-json.log_message `loggggggggggggg`
+json.log_message "loggggggggggggg"
 ```
 so
 ```javascript
-APP.demos.js.new({ log_message: `loggggggggggggg` });
+APP.demos.js.new({ log_message: "loggggggggggggg" });
 ```
 is called automatically.
 
 ## Advanced Use
 To be written...
-
