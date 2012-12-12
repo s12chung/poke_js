@@ -1,7 +1,5 @@
 (function() {
-    var format = 'js',
-            controller = '<%= poke_js_template[0].gsub("/", ".") %>',
-            action = '<%= poke_js_template[1] %>';
-    APP[controller][format][action + '_params'] = <%= yield %>;
-    POKE.exec_all(controller, format, action);
+    <% controller, action = poke_js_template %>
+    APP.<%= controller.gsub("/", ".") %>.js.<%= action %>_params = <%= yield %>;
+    POKE.exec_all('<%= poke_js_template[0] %>', 'js', '<%= poke_js_template[1] %>');
 })();

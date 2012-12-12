@@ -56,7 +56,7 @@ POKE = {
     }
 };
 
-if (POKE.blank(window["APP"]))
+if (POKE.blank(window["APP"])) {
     APP = {
         namespace_string: function(namespace_string) {
             return "APP." + namespace_string;
@@ -68,5 +68,6 @@ if (POKE.blank(window["APP"]))
             return POKE.define(APP.namespace_string(namespace_string), definition);
         }
     };
+}
 $(POKE.init);
-$(document).on('page:change', POKE.init)
+$(document).on('page:change', POKE.init);
