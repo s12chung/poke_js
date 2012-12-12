@@ -36,7 +36,7 @@ js format is also supported, i.e.:
 * `APP.demos.js.demo_action` (with parameters if given)
 
 ## Installation
-Add this line to your application's Gemfile:
+Add this line to your application's `Gemfile`:
 
     gem 'poke_js'
 
@@ -44,11 +44,11 @@ And then execute:
 
     $ bundle
 
-Add this to your app/assets/application.js
+Add this to your `app/assets/javascripts/application.js`
 
     //= require poke_js
 
-Make sure your app/views/layouts/application.html.erb (and all your other layouts) looks like this:
+Make sure your `app/views/layouts/application.html.erb` (and all your other layouts) looks like this:
 ```erb
 <html>
 <head>… <%= poke %> …</head>
@@ -61,7 +61,7 @@ Make sure your app/views/layouts/application.html.erb (and all your other layout
 ## Basic Use
 I like to have a JS file for every controller in `app/assets/javascripts/controllers`. Like so:
 
-app/assets/javascripts/controllers/demos.js:
+`app/assets/javascripts/controllers/demos.js`:
 ```javascript
 (function() {
 	// "APP.define()" extends the namespace demos if it exists and returns it. This allows me to access "demos" with typing "APP.demos".
@@ -90,7 +90,7 @@ For a `js` request sent to `demos#new`, `APP.demos.js.new` is called and nothing
 __Optional__ Parameters are passed from a JSON DSL (such as [jbuilder](https://github.com/rails/jbuilder/)) and are passed as the `params` object to the function.
 
 #### HTML
-app/views/demos/edit_params.js.jbuilder:
+`app/views/demos/edit_params.js.jbuilder`:
 ```ruby
 json.alert_message "ploop"
 ```
@@ -103,7 +103,7 @@ APP.demos.html.edit({
 is called automatically.
 
 #### Javascript
-app/views/demos/new.js.jbuilder (using  or use your favourite JSON DSL):
+`app/views/demos/new.js.jbuilder`:
 ```ruby
 json.log_message "loggggggggggggg"
 ```
