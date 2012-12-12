@@ -52,7 +52,7 @@ Make sure your `app/views/layouts/application.html.erb` (and all your other layo
 ```erb
 <html>
 <head>… <%= poke %> …</head>
-<body data-controller="<%= poke_js_template.first %>" data-action="<%= poke_js_template.last %>">
+<body data-controller=`<%= poke_js_template.first %>` data-action=`<%= poke_js_template.last %>`>
     …
 </body>
 </html>
@@ -64,7 +64,6 @@ I like to have a JS file for every controller in `app/assets/javascripts/control
 `app/assets/javascripts/controllers/demos.js`:
 ```javascript
 (function() {
-	// "APP.define()" extends or creates the namespace "APP.demos" and returns it. This allows me to access "demos" with typing "APP.demos".
 	var demos = APP.define('demos', {
 		html: {
 			edit: function(params) {
@@ -80,6 +79,14 @@ I like to have a JS file for every controller in `app/assets/javascripts/control
 	});
 })();
 ```
+
+`APP.define()` extends or creates the namespace `APP.demos`
+and returns it. This allows me to access `APP.demos` through
+the `demos` variable.
+
+You can also use the traditional hash
+namespacing shown in the [Setup your namespace](https://github.com/s12chung/poke_js#setup-your-namespace) section.
+
 ### HTML
 So if a `html` request is sent to `demos#edit`, `APP.demos.html.edit` is called with the HTML view rendering.
 
@@ -92,22 +99,22 @@ __Optional__ Parameters are passed from a JSON DSL (such as [jbuilder](https://g
 #### HTML
 `app/views/demos/edit_params.js.jbuilder`:
 ```ruby
-json.alert_message "ploop"
+json.alert_message `ploop`
 ```
 so 
 ```javascript
-APP.demos.html.edit({ alert_message: "ploop" });
+APP.demos.html.edit({ alert_message: `ploop` });
 ```
 is called automatically.
 
 #### Javascript
 `app/views/demos/new.js.jbuilder`:
 ```ruby
-json.log_message "loggggggggggggg"
+json.log_message `loggggggggggggg`
 ```
 so
 ```javascript
-APP.demos.js.new({ log_message: "loggggggggggggg" });
+APP.demos.js.new({ log_message: `loggggggggggggg` });
 ```
 is called automatically.
 
