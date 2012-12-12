@@ -53,7 +53,7 @@ Make sure your app/views/layouts/application.html.erb (and all your other layout
 ```
 
 ## Basic Use
-What I do is separate my JS file for every controller in app/assets/javascripts/controllers. Like so:
+I like to have a JS file for every controller in `app/assets/javascripts/controllers`. Like so:
 
 app/assets/javascripts/controllers/demos.js:
 ```javascript
@@ -75,16 +75,39 @@ app/assets/javascripts/controllers/demos.js:
 })();
 ```
 ### HTML
-So if a html request is sent to demos#edit, APP.demos.html.edit is called. If I want to pass parameters, I create:
-
-app/views/demos/edit_params.js.jbuilder (or use your favourite JSON DSL):
-json.alert_message "ploop"
-
+So if a `html` request is sent to `demos#edit`, `APP.demos.html.edit` is called.
 
 ### Javascript
-For a js request sent to demos#new, APP.demos.js.new is called, as if it was the javascript returned from the AJAX called. Parameters are passed with:
-app/views/demos/new.js.jbuilder (or use your favourite JSON DSL):
+For a `js` request sent to `demos#new`, `APP.demos.js.new` is called, as if it was the javascript returned from the AJAX request is called. 
+
+### Passing parameters
+__Optional__ Parameters are passed from a JSON DSL (such as [jbuilder](https://github.com/rails/jbuilder/)) and are passed as the `params` object to the function.
+
+#### HTML
+app/views/demos/edit_params.js.jbuilder:
+```ruby
+json.alert_message "ploop"
+```
+so 
+```javascript
+APP.demos.html.edit({
+	alert_message: "plop"
+});
+```
+is called automatically.
+
+#### Javascript
+app/views/demos/new.js.jbuilder (using  or use your favourite JSON DSL):
+```ruby
 json.log_message "loggggggggggggg"
+```
+so
+```javascript
+APP.demos.js.new({
+	alert_message: "plop"
+});
+```
+is called automatically.
 
 ## Advanced Use
 To be written...
