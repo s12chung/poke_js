@@ -1,6 +1,6 @@
 (function() {
     var format = 'js',
-            controller = '<%= poke_js_template[0] %>',
+            controller = '<%= poke_js_template[0].gsub("/", ".") %>',
             action = '<%= poke_js_template[1] %>';
     APP[controller][format][action + '_params'] = <%= yield %>;
     POKE.exec_all(controller, format, action);
