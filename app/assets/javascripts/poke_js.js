@@ -69,3 +69,4 @@ if (POKE.blank(window["APP"]))
         }
     };
 $(POKE.init);
+$(document).on('page:change', POKE.init)
