@@ -28,8 +28,8 @@ module PokeJs
             if lookup_context.template_exists? "#{controller}/#{action}_params"
               javascript_tag do
                 raw %Q/
-              APP.#{controller}.html.#{action}_params = #{ render :template => "#{controller}/#{action}_params" };
-            /
+                  APP.#{controller.gsub("/", ".")}.html.#{action}_params = #{ render :template => "#{controller}/#{action}_params" };
+                /
               end
             end
           end
@@ -51,9 +51,14 @@ module PokeJs
 
     private
     def extract_template(template)
-      extracted_template = [controller_name, action_name]
+      extracted_template = [controller_path, action_name]
       if template
-        array = template.class == Array ? template : template.to_s.split('/')
+        array = if template.class == Array
+                  template
+                else
+                  split = template.to_s.split('/')
+                  [split[0..-2].join('/'), split.last]
+                end
         if array.size == 1
           extracted_template[1] = array.first
         else

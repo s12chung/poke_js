@@ -18,6 +18,20 @@ POKE = {
         return $.extend(found_namespace, definition);
     },
 
+    get_action_namespace: function(controller, format) {
+        var levels = controller.split('/');
+        levels.push(format);
+
+        var current_namespace = APP;
+
+        for (var i=0;i<levels.length;i++) {
+            var level = levels[i];
+            if (POKE.blank(current_namespace[level]))
+                return false;
+            current_namespace = current_namespace[level];
+        }
+        return current_namespace;
+    },
 
     exec_all: function(controller, format, action) {
         POKE.exec("all", format);
@@ -25,13 +39,12 @@ POKE = {
         POKE.exec(controller, format, action);
     },
     exec: function(controller, format, action) {
-        var ns = APP,
-            action = (action === undefined) ? "init" : action;
+        var action_namespace = POKE.get_action_namespace(controller, format)
 
-        if (controller !== "" && ns[controller] &&
-            format !== "" && ns[controller][format]) {
-            var funct = ns[controller][format][action],
-                params = ns[controller][format][action + "_params"];
+        if ($.type(action_namespace) === "object") {
+            action = (action === undefined) ? "init" : action;
+            var funct = action_namespace[action],
+                params = action_namespace[action + "_params"];
 
             if ($.isFunction(funct))
                 funct(params);
