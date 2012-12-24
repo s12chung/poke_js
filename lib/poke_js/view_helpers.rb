@@ -36,7 +36,7 @@ module PokeJs
         elsif format == :js
           content_for :head do
             javascript_tag do
-              render :template => "#{controller}/#{action}", :formats => [:js], :layout => "layouts/application"
+              "$(function(){#{render :template => "#{controller}/#{action}", :formats => [:js], :layout => "layouts/application"}});".html_safe
             end
           end
         end
