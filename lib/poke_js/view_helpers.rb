@@ -57,7 +57,11 @@ module PokeJs
                   template
                 else
                   split = template.to_s.split('/')
-                  [split[0..-2].join('/'), split.last]
+                  template_controller = split[0..-2]
+                  unless template_controller.empty?
+                    template_controller = [template_controller.join('/')]
+                  end
+                  template_controller + [split.last]
                 end
         if array.size == 1
           extracted_template[1] = array.first
