@@ -34,7 +34,8 @@ POKE = {
     },
 
     exec_all: function(controller, format, action) {
-        POKE.exec("all", format);
+        POKE.exec("application", format);
+        POKE.exec("application", format, action);
         POKE.exec(controller, format);
         POKE.exec(controller, format, action);
     },
