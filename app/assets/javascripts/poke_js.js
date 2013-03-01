@@ -53,7 +53,7 @@ POKE = {
     },
     init: function() {
         var $body = $('body');
-        POKE.exec_all($body.data("controller"), "html", $body.data("action"));
+        POKE.exec_all(POKE.controller, "html", POKE.action);
     }
 };
 

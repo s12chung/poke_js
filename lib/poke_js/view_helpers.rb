@@ -26,10 +26,10 @@ module PokeJs
         if format == :html
           with_format(:js) do
             if lookup_context.template_exists? "#{controller}/#{action}_params"
+              #defined in application.js.erb
+              poke_string = %Q/POKE.define('POKE', { controller: "#{controller}", action: "#{action}", method: "#{request.method}", path: "#{request.env['PATH_INFO']}" });/
               javascript_tag do
-                raw %Q/
-                  APP.#{controller.gsub("/", ".")}.html.#{action}_params = #{ render :template => "#{controller}/#{action}_params" };
-                /
+                raw %Q/APP.#{controller.gsub("/", ".")}.html.#{action}_params = #{ render :template => "#{controller}/#{action}_params" };#{poke_string}/
               end
             end
           end
