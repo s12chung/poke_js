@@ -20,13 +20,17 @@ module PokeJs
       @poke_js_template = old_template
     end
 
+    def define_poke_state(template=@poke_js_template)
+      controller, action = extract_template(template)
+      %Q/POKE.define('POKE', { controller: "#{controller}", action: "#{action}", method: "#{request.method}", path: "#{request.env['PATH_INFO']}", format: "#{request.format.symbol}" });/
+    end
+
     def poke(template=@poke_js_template, format=formats.first)
       controller, action = extract_template(template)
       poke_lambda = -> do
         if format == :html
           with_format(:js) do
-            #defined in application.js.erb
-            javascript = %Q/POKE.define('POKE', { controller: "#{controller}", action: "#{action}", method: "#{request.method}", path: "#{request.env['PATH_INFO']}", format: "#{request.format.symbol}" });/
+            javascript = define_poke_state
             if lookup_context.template_exists? "#{controller}/#{action}_params"
               javascript += %Q/APP.#{controller.gsub("/", ".")}.html.#{action}_params = #{ render :template => "#{controller}/#{action}_params" };/
             end
