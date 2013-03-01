@@ -25,12 +25,13 @@ module PokeJs
       poke_lambda = -> do
         if format == :html
           with_format(:js) do
+            #defined in application.js.erb
+            javascript = %Q/POKE.define('POKE', { controller: "#{controller}", action: "#{action}", method: "#{request.method}", path: "#{request.env['PATH_INFO']}", format: "#{request.format.symbol}" });/
             if lookup_context.template_exists? "#{controller}/#{action}_params"
-              #defined in application.js.erb
-              poke_string = %Q/POKE.define('POKE', { controller: "#{controller}", action: "#{action}", method: "#{request.method}", path: "#{request.env['PATH_INFO']}", format: "#{request.format.symbol}" });/
-              javascript_tag do
-                raw %Q/APP.#{controller.gsub("/", ".")}.html.#{action}_params = #{ render :template => "#{controller}/#{action}_params" };#{poke_string}/
-              end
+              javascript += %Q/APP.#{controller.gsub("/", ".")}.html.#{action}_params = #{ render :template => "#{controller}/#{action}_params" };/
+            end
+            javascript_tag do
+              raw javascript
             end
           end
         elsif format == :js
