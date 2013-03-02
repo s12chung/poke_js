@@ -19,6 +19,7 @@ POKE = {
     },
 
     traverse_namespace: function(levels, namespace) {
+        if (typeof levels === "undefined") levels = [POKE.controller, POKE.format, POKE.action];
         levels = POKE.formatted_levels(levels);
         if (typeof namespace === "undefined") namespace = APP;
 
