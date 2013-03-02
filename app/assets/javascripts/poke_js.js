@@ -43,13 +43,14 @@ POKE = {
 
     exec_all: function(controller, format, action) {
         var params = APP.traverse_namespace([controller, format, action + "_params"]);
-        POKE.exec("application", format, undefined, params);
-        POKE.exec("application", format, action, params);
-        POKE.exec(controller, format, undefined, params);
+        POKE.exec("application", format, "before", params);
+        POKE.exec(controller, format, "before", params);
         POKE.exec(controller, format, action, params);
+        POKE.exec(controller, format, "after", params);
+        POKE.exec("application", format, "after", params);
     },
     exec: function(controller, format, action, params) {
-        var action_namespace = APP.traverse_namespace([controller, format, (typeof action === "undefined" ? "init" : action)]);
+        var action_namespace = APP.traverse_namespace([controller, format, action]);
         if ($.isFunction(action_namespace)) action_namespace(params);
     },
     init: function() {
