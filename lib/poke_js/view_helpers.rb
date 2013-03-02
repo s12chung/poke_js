@@ -22,7 +22,12 @@ module PokeJs
 
     def define_poke_state(template=@poke_js_template)
       controller, action = extract_template(template)
-      %Q/POKE.define('POKE', { controller: "#{controller}", action: "#{action}", method: "#{request.method}", path: "#{request.env['PATH_INFO']}", format: "#{request.format.symbol}" });/
+
+      poke_state  =  { controller: controller, action: action, method: request.method, path: request.env['PATH_INFO'], format: request.format.symbol }
+      if self.respond_to? :add_poke_state
+        poke_state.reverse_merge! add_poke_state
+      end
+      %Q/POKE.define('POKE', #{ poke_state.to_json });/
     end
 
     def poke(template=@poke_js_template, format=formats.first)
