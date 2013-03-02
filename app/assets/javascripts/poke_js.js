@@ -18,10 +18,9 @@ POKE = {
         return $.extend(found_namespace, definition);
     },
 
-    traverse_namespace: function(levels, namespace) {
+    traverse_namespace: function(namespace, levels) {
         if (typeof levels === "undefined") levels = [POKE.controller, POKE.format, POKE.action];
         levels = POKE.formatted_levels(levels);
-        if (typeof namespace === "undefined") namespace = APP;
 
         var current_level = namespace;
         var level;
@@ -43,14 +42,14 @@ POKE = {
     },
 
     exec_all: function(controller, format, action) {
-        var params = POKE.traverse_namespace([controller, format, action + "_params"]);
+        var params = APP.traverse_namespace([controller, format, action + "_params"]);
         POKE.exec("application", format, undefined, params);
         POKE.exec("application", format, action, params);
         POKE.exec(controller, format, undefined, params);
         POKE.exec(controller, format, action, params);
     },
     exec: function(controller, format, action, params) {
-        var action_namespace = POKE.traverse_namespace([controller, format, (typeof action === "undefined" ? "init" : action)]);
+        var action_namespace = APP.traverse_namespace([controller, format, (typeof action === "undefined" ? "init" : action)]);
         if ($.isFunction(action_namespace)) action_namespace(params);
     },
     init: function() {
@@ -69,6 +68,9 @@ if (POKE.blank(window["APP"])) {
         },
         define: function(namespace_string, definition) {
             return POKE.define(APP.namespace_string(namespace_string), definition);
+        },
+        traverse_namespace: function(levels) {
+            return POKE.traverse_namespace(APP, levels);
         }
     };
 }
