@@ -34,19 +34,18 @@ POKE = {
     },
 
     exec_all: function(controller, format, action) {
-        POKE.exec("application", format);
-        POKE.exec("application", format, action);
-        POKE.exec(controller, format);
-        POKE.exec(controller, format, action);
+        var params = POKE.get_action_namespace(controller, format)[action + "_params"];
+        POKE.exec("application", format, undefined, params);
+        POKE.exec("application", format, action, params);
+        POKE.exec(controller, format, undefined, params);
+        POKE.exec(controller, format, action, params);
     },
-    exec: function(controller, format, action) {
-        var action_namespace = POKE.get_action_namespace(controller, format)
+    exec: function(controller, format, action, params) {
+        var action_namespace = POKE.get_action_namespace(controller, format);
 
         if ($.type(action_namespace) === "object") {
             action = (action === undefined) ? "init" : action;
-            var funct = action_namespace[action],
-                params = action_namespace[action + "_params"];
-
+            var funct = action_namespace[action];
             if ($.isFunction(funct))
                 funct(params);
         }
