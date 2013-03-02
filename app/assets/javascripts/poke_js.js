@@ -18,37 +18,39 @@ POKE = {
         return $.extend(found_namespace, definition);
     },
 
-    get_action_namespace: function(controller, format) {
-        var levels = controller.split('/');
-        levels.push(format);
+    traverse_namespace: function(levels, namespace) {
+        levels = POKE.formatted_levels(levels);
+        if (typeof namespace === "undefined") namespace = APP;
 
-        var current_namespace = APP;
-
+        var current_level = namespace;
+        var level;
         for (var i=0;i<levels.length;i++) {
-            var level = levels[i];
-            if (POKE.blank(current_namespace[level]))
-                return false;
-            current_namespace = current_namespace[level];
+            level = levels[i];
+            current_level = current_level[level];
+            if (typeof current_level === "undefined") return undefined;
         }
-        return current_namespace;
+        return current_level;
+    },
+    formatted_levels: function(levels) {
+        var formatted_levels = [];
+        var level;
+        for (var i=0;i<levels.length;i++) {
+            level = levels[i];
+            formatted_levels = formatted_levels.concat(level.split('/'));
+        }
+        return formatted_levels;
     },
 
     exec_all: function(controller, format, action) {
-        var params = POKE.get_action_namespace(controller, format)[action + "_params"];
+        var params = POKE.traverse_namespace([controller, format, action + "_params"]);
         POKE.exec("application", format, undefined, params);
         POKE.exec("application", format, action, params);
         POKE.exec(controller, format, undefined, params);
         POKE.exec(controller, format, action, params);
     },
     exec: function(controller, format, action, params) {
-        var action_namespace = POKE.get_action_namespace(controller, format);
-
-        if ($.type(action_namespace) === "object") {
-            action = (action === undefined) ? "init" : action;
-            var funct = action_namespace[action];
-            if ($.isFunction(funct))
-                funct(params);
-        }
+        var action_namespace = POKE.traverse_namespace([controller, format, (typeof action === "undefined" ? "init" : action)]);
+        if ($.isFunction(action_namespace)) action_namespace(params);
     },
     init: function() {
         var $body = $('body');
