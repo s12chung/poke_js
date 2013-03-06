@@ -1,5 +1,5 @@
 (function() {
     POKE.create_namespace('<%= poke_js_params %>');
     <%= poke_js_params %> = <%= define_poke_js_params { yield } %>;
-    POKE.exec_all('<% poke_js_params %>');
+    POKE.exec_all(<%= poke_js_params %>);
 })();
