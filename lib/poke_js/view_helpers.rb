@@ -17,9 +17,9 @@ module PokeJs
       result
     end
 
-    def poke_js_params(template=@poke_js_template, format=formats.first)
+    def poke_js_params(template=@poke_js_template)
       controller, action = extract_template(template)
-      raw "APP.#{controller.gsub("/", ".")}.#{format}.#{action}_params"
+      raw "APP.#{controller.gsub("/", ".")}.#{request.format.symbol}.#{action}_params"
     end
 
     def define_poke_js_params(template=@poke_js_template)
