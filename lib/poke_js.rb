@@ -1,4 +1,5 @@
 require "poke_js/view_helpers"
+require "poke_js/controller"
 
 module PokeJs
   if defined?(Rails) && defined?(Rails::Engine)

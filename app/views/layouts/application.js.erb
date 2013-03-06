@@ -1,6 +1,5 @@
 (function() {
-    <%= raw define_poke_state %>
-    <% controller, action = poke_js_template %>
-    APP.<%= controller.gsub("/", ".") %>.js.<%= action %>_params = <%= yield %>;
-    POKE.exec_all('<%= poke_js_template[0] %>', 'js', '<%= poke_js_template[1] %>');
+    POKE.create_namespace('<%= poke_js_params %>');
+    <%= poke_js_params %> = <%= define_poke_js_params { yield } %>;
+    POKE.exec_all('<% poke_js_params %>');
 })();

@@ -19,7 +19,7 @@ POKE = {
     },
 
     traverse_namespace: function(namespace, levels) {
-        if (typeof levels === "undefined") levels = [POKE.controller, POKE.format, POKE.action];
+        if (!$.isArray(levels)) levels = [levels.controller, levels.format, levels.action];
         levels = POKE.formatted_levels(levels);
 
         var current_level = namespace;
@@ -41,21 +41,24 @@ POKE = {
         return formatted_levels;
     },
 
-    exec_all: function(controller, format, action) {
-        var params = APP.traverse_namespace([controller, format, action + "_params"]);
-        POKE.exec("application", format, "before", params);
-        POKE.exec(controller, format, "before", params);
-        POKE.exec(controller, format, action, params);
-        POKE.exec(controller, format, "after", params);
-        POKE.exec("application", format, "after", params);
+    create_namespace: function(namespace) {
+        var current_level = window;
+        $.each(namespace.split("."), function(index, level) {
+            if (!$.isPlainObject(current_level[level])) current_level[level] = {};
+            current_level = current_level[level];
+        });
+    },
+
+    exec_all: function(params) {
+        POKE.exec("application", params.format, "before", params);
+        POKE.exec(params.controller, params.format, "before", params);
+        POKE.exec(params.controller, params.format, params.action, params);
+        POKE.exec(params.controller, params.format, "after", params);
+        POKE.exec("application", params.format, "after", params);
     },
     exec: function(controller, format, action, params) {
         var action_namespace = APP.traverse_namespace([controller, format, action]);
         if ($.isFunction(action_namespace)) action_namespace(params);
-    },
-    init: function() {
-        var $body = $('body');
-        POKE.exec_all(POKE.controller, "html", POKE.action);
     }
 };
 
@@ -75,5 +78,3 @@ if (POKE.blank(window["APP"])) {
         }
     };
 }
-$(POKE.init);
-$(document).on('page:change', POKE.init);
