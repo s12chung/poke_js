@@ -52,6 +52,7 @@ POKE = {
     exec_all: function(params) {
         POKE.exec("application", params.format, "before", params);
         POKE.exec(params.controller, params.format, "before", params);
+        POKE.exec("application", params.format, params.action, params);
         POKE.exec(params.controller, params.format, params.action, params);
         POKE.exec(params.controller, params.format, "after", params);
         POKE.exec("application", params.format, "after", params);
