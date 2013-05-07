@@ -31,8 +31,9 @@ module PokeJs
       end
       javascript = params.to_json
       if block_given?
-        if yield
-          javascript = "$.extend(#{yield}, #{javascript});"
+        generated_params = yield
+        if generated_params
+          javascript = "$.extend(#{generated_params}, #{javascript});"
         end
       end
       raw javascript
