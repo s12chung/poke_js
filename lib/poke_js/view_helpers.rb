@@ -19,13 +19,13 @@ module PokeJs
 
     def poke_js_params(template=@poke_js_template)
       controller, action = extract_template(template)
-      raw "APP.#{controller.gsub("/", ".")}.#{request.format.symbol}.#{action}_params"
+      raw "APP.#{controller.gsub("/", ".")}.#{formats.first}.#{action}_params"
     end
 
     def define_poke_js_params(template=@poke_js_template)
       controller, action = extract_template(template)
 
-      params  =  { controller: controller, action: action, method: request.method, path: request.env['PATH_INFO'], format: request.format.symbol }
+      params  =  { controller: controller, action: action, method: request.method, path: request.env['PATH_INFO'], format: formats.first }
       if self.respond_to? :add_params
         params.reverse_merge! add_params
       end
@@ -47,35 +47,37 @@ module PokeJs
       controller, action = extract_template(template)
       poke_lambda = -> do
         if format == :html
-          with_format(:js) do
-            javascript_tag do
-              raw %Q/
-                  POKE.create_namespace('#{poke_js_params}');
-                  #{poke_js_params} = #{ define_poke_js_params do
-                    if lookup_context.template_exists? "#{controller}/#{action}_params"
-                      render(template: "#{controller}/#{action}_params")
-                    end
-                  end };
-                  #{
-                  if @source_poke
-                    %Q/$(function() { POKE.exec_all(#{poke_js_params}); });/
-                  else
-                    %Q/
-                      POKE.define('POKE', {
-                      params: #{poke_js_params},
-                          init: function() { POKE.exec_all(POKE.params); },
-                      });
-                      $(POKE.init);
-                    /
-                  end
-                  }
+          javascript_tag do
+            raw %Q/
+                POKE.create_namespace('#{poke_js_params}');
+                #{poke_js_params} = #{ define_poke_js_params do
+              with_format :js do
+                if lookup_context.template_exists? "#{controller}/#{action}_params"
+                  render(template: "#{controller}/#{action}_params")
+                end
+              end
+            end };
+                #{
+            if @source_poke
+              %Q/$(function() { POKE.exec_all(#{poke_js_params}); });/
+            else
+              %Q/
+                    POKE.define('POKE', {
+                    params: #{poke_js_params},
+                        init: function() { POKE.exec_all(POKE.params); },
+                    });
+                    $(POKE.init);
                   /
             end
+            }
+                /
           end
         elsif format == :js
-          content_for :head do
-            javascript_tag do
-              raw "$(function(){#{render template: "#{controller}/#{action}", formats: [:js], layout: "layouts/application"}});"
+          with_format :js do
+            content_for :head do
+              javascript_tag do
+                raw "$(function(){#{render template: "#{controller}/#{action}", formats: [:js], layout: "layouts/application"}});"
+              end
             end
           end
         end
